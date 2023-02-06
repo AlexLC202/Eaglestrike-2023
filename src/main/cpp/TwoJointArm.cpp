@@ -2,16 +2,18 @@
 
 TwoJointArm::TwoJointArm() : shoulderMaster_(TwoJointArmConstants::SHOULDER_MASTER_ID), shoulderSlave_(TwoJointArmConstants::SHOULDER_SLAVE_ID),
                              elbowMaster_(TwoJointArmConstants::ELBOW_MASTER_ID), elbowSlave_(TwoJointArmConstants::ELBOW_SLAVE_ID),
-                             shoulderBrake_(frc::PneumaticsModuleType::CTREPCM, TwoJointArmConstants::SHOULDER_BRAKE_ID), elbowBrake_(frc::PneumaticsModuleType::CTREPCM, TwoJointArmConstants::ELBOW_BRAKE_ID),
+                             shoulderBrake_(frc::PneumaticsModuleType::REVPH, TwoJointArmConstants::SHOULDER_BRAKE_ID), elbowBrake_(frc::PneumaticsModuleType::REVPH, TwoJointArmConstants::ELBOW_BRAKE_ID),
                              shoulderTraj_(TwoJointArmConstants::SHOULDER_ARM_MAX_VEL, TwoJointArmConstants::SHOULDER_ARM_MAX_ACC, 0, 0, 0, 0), elbowTraj_(TwoJointArmConstants::ELBOW_ARM_MAX_VEL, TwoJointArmConstants::ELBOW_ARM_MAX_ACC, 0, 0, 0, 0)
 {
     shoulderMaster_.SetNeutralMode(NeutralMode::Brake);
     shoulderSlave_.SetNeutralMode(NeutralMode::Brake);
     shoulderSlave_.Follow(shoulderMaster_);
-
+    shoulderSlave_.SetInverted(InvertType::FollowMaster);
+    
     elbowMaster_.SetNeutralMode(NeutralMode::Brake);
     elbowSlave_.SetNeutralMode(NeutralMode::Brake);
     elbowSlave_.Follow(elbowMaster_); //HERE
+    elbowSlave_.SetInverted(InvertType::FollowMaster);
 
     claw_.setOpen(false);
 
@@ -566,25 +568,29 @@ void TwoJointArm::manualControl(double thetaVel, double phiVel)
     if (abs(thetaVel * 2 / TwoJointArmConstants::SHOULDER_ARM_MAX_VEL) < 0.2)
     {
         setBrakes(true, elbowBrakeEngaged());
+        shoulderMaster_.SetVoltage(units::volt_t{0});
     }
     else
     {
         setBrakes(false, elbowBrakeEngaged());
+        shoulderMaster_.SetVoltage(units::volt_t{thetaVolts});
     }
 
     if (abs(phiVel * 2 / TwoJointArmConstants::ELBOW_ARM_MAX_VEL) < 0.2)
     {
 
         setBrakes(shoulderBrakeEngaged(), true);
+        elbowMaster_.SetVoltage(units::volt_t{0});
     }
     else
     {
         setBrakes(shoulderBrakeEngaged(), false);
+        elbowMaster_.SetVoltage(units::volt_t{phiVolts});
     }
 
     // double elbowVel = 360 * 10 * TwoJointArmConstants::MOTOR_TO_ELBOW_RATIO * elbowMaster_.GetSelectedSensorVelocity() / 4096.0;
 
-    double gravityTorque = calcElbowGravityTorque(getTheta(), getPhi(), false);
+    //double gravityTorque = calcElbowGravityTorque(getTheta(), getPhi(), false);
     //phiVolts += gravityTorque * 3.24;
     // cout << getPhi() << ", " << elbowVel_ << endl;
     // cout << getTheta() << ", " << shoulderVel_ << endl;
@@ -597,11 +603,9 @@ void TwoJointArm::manualControl(double thetaVel, double phiVel)
     //3, 245, 480
     //4, 360, 670
 
-    double shoulderGravityTorque = calcShoulderGravityTorque(getTheta(), getPhi(), false);
+    //double shoulderGravityTorque = calcShoulderGravityTorque(getTheta(), getPhi(), false);
     //thetaVolts += shoulderGravityTorque * (2.8 / 1.7);
 
-    shoulderMaster_.SetVoltage(units::volt_t{thetaVolts});
-    elbowMaster_.SetVoltage(units::volt_t{phiVolts});
 }
 
 double TwoJointArm::calcShoulderVolts(double wantedVel, double wantedAcc, double wantedPos, double theta, double phi, bool hasCone)
@@ -781,14 +785,16 @@ double TwoJointArm::calcR(double volts)
 
 double TwoJointArm::getTheta()
 {
-    return -shoulderMaster_.GetSelectedSensorPosition() * (360.0 / 4096.0); // HERE
-    //return shoulderMaster_.GetSelectedSensorPosition(); // TODO with encoders, don't forget switching sides
+    //return -shoulderMaster_.GetSelectedSensorPosition() * (360.0 / 4096.0); // HERE
+    // TODO with encoders, don't forget switching sides
+    return elbowMaster_.GetSelectedSensorPosition() / 2048 * 360 * TwoJointArmConstants::MOTOR_TO_SHOULDER_RATIO;
 }
 
 double TwoJointArm::getPhi()
 {
-    return elbowMaster_.GetSelectedSensorPosition() * (360.0 / 4096.0) - getTheta(); // HERE
-    //return elbowMaster_.GetSelectedSensorPosition(); // TODO with encoders, don't forget switching sides
+    //return elbowMaster_.GetSelectedSensorPosition() * (360.0 / 4096.0) - getTheta(); // HERE
+    // TODO with encoders, don't forget switching sides
+    return elbowMaster_.GetSelectedSensorPosition() / 2048 * 360 * TwoJointArmConstants::MOTOR_TO_ELBOW_RATIO * TwoJointArmConstants::SHOULDER_TO_ELBOW_RATIO - (getTheta() * TwoJointArmConstants::SHOULDER_TO_ELBOW_RATIO);
 }
 
 double TwoJointArm::getThetaVel()

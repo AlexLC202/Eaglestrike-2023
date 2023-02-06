@@ -16,6 +16,7 @@ Robot::Robot() : autoPaths_(swerveDrive_)
         {
             double yaw = navx_->GetYaw() - yawOffset_;
             Helpers::normalizeAngle(yaw);
+            frc::SmartDashboard::PutNumber("yaw", yaw);
 
             if (frc::DriverStation::IsAutonomous() && frc::DriverStation::IsEnabled())
             {
@@ -75,7 +76,7 @@ void Robot::RobotInit()
     
     try
     {
-        navx_ = new AHRS(frc::SPI::Port::kMXP);
+        navx_ = new AHRS(frc::SerialPort::kUSB);
     }
     catch (const exception &e)
     {
@@ -137,7 +138,7 @@ void Robot::AutonomousPeriodic()
 
 void Robot::TeleopInit()
 {
-    //frc::SmartDashboard::PutNumber("Test Volts", 0);
+    frc::SmartDashboard::PutNumber("Test Volts", 0);
     //frc::SmartDashboard::PutNumber("Set Theta", 0);
     //frc::SmartDashboard::PutNumber("Set Phi", 0);
     //frc::SmartDashboard::PutNumber("Swerve Volts", 0);
@@ -149,7 +150,6 @@ void Robot::TeleopInit()
 void Robot::TeleopPeriodic()
 {
     controls_->periodic();
-    frc::SmartDashboard::PutNumber("yaw", navx_->GetYaw() - yawOffset_);
 
     if (controls_->fieldOrient())
     {
@@ -176,7 +176,7 @@ void Robot::TeleopPeriodic()
     }
     else
     {
-        /*if(controls_->aPressed())
+        if(controls_->aPressed())
         {
             arm_.goToPos(frc::SmartDashboard::GetNumber("Set Theta", 0), frc::SmartDashboard::GetNumber("Set Phi", 0));
         }
@@ -187,10 +187,10 @@ void Robot::TeleopPeriodic()
         if(arm_.getState() == TwoJointArm::MANUAL)
         {
             arm_.stop();
-        }*/
+        }
 
         // TODO use right trigger for auto stuff
-        if (controls_->aPressed())
+        /*if (controls_->aPressed())
         {
             arm_.setPosTo(TwoJointArmProfiles::PLAYER_STATION);
         }
@@ -219,7 +219,7 @@ void Robot::TeleopPeriodic()
         if (controls_->dPadUpPressed())
         {
             arm_.toggleForward(); // COULDO technically spams it when down. Maybe polish
-        }
+        }*/
     }
 
     if (controls_->lBumperPressed())
