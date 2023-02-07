@@ -17,6 +17,7 @@
 #include "SwerveDrive.h"
 #include "AutoPaths.h"
 #include "TwoJointArm.h"
+#include <frc/PneumaticHub.h>
 
 class Robot : public frc::TimedRobot
 {
@@ -40,6 +41,7 @@ private:
     frc::SendableChooser<bool> sideChooser_;
 
     AHRS *navx_;
+    frc::PneumaticHub pneumaticHub_{1};
 
     Controls* controls_ = new Controls();
     SwerveDrive* swerveDrive_ = new SwerveDrive();

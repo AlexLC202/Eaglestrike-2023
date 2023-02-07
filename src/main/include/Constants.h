@@ -80,7 +80,7 @@ namespace InputConstants
     const int XBOX_PORT = 2;
     const int XBOX_LJOY_X = 0;
     const int XBOX_LJOY_Y = 1;
-    const int XBOX_LTRIGGER = 2; //TODO check values
+    const int XBOX_LTRIGGER = 2;
     const int XBOX_RTRIGGER = 3;
     const int XBOX_RJOY_X = 4;
     const int XBOX_RJOY_Y = 5;
@@ -152,8 +152,8 @@ namespace SwerveConstants
 
 namespace TwoJointArmConstants
 {
-	const double UPPER_ARM_LENGTH = 0.762; //TODO get values 0.635
-	const double FOREARM_LENGTH = 0.762; //0.8636
+	const double UPPER_ARM_LENGTH = 0.635; //TODO get values 0.635
+	const double FOREARM_LENGTH = 0.8636; //0.8636 (0.762 for both, prototype)
     const double EE_LENGTH = 0.2794; //0.2794
     const double MOUNTING_HEIGHT = 0.508; //0.508
 	
@@ -191,9 +191,14 @@ namespace TwoJointArmConstants
     const double ELBOW_KV = 0;
     const double ELBOW_KVI = 0;
 
+    const double skD_ = 0;
+    const double skP_ = 0.0;
+    const double ekD_ = 0;
+    const double ekP_ = 0.0;
+
     const double SHOULDER_TO_ELBOW_RATIO = 30.0 / 54.0; //30:54
-    const double MOTOR_TO_SHOULDER_RATIO = 1.0 / 194.4; // 1:194.4, 1:100
-    const double MOTOR_TO_ELBOW_RATIO = 1.0 / 40.5; //1:40.5 for motor to shoulder area, 1:72.9 for motor to elbow joint
+    const double MOTOR_TO_SHOULDER_RATIO = 1.0 / 243.911; // 1:194.4 (243.911), 1:100
+    const double MOTOR_TO_ELBOW_RATIO = 1.0 / 43.556; //1:40.5 (43.556) for motor to shoulder area, 1:72.9 for motor to elbow joint
 
     const double HIGH_CUBE_OUTAKE_VOLTS = -1;
     const double MID_CUBE_OUTAKE_VOLTS = -1;

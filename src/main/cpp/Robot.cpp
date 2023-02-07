@@ -143,6 +143,8 @@ void Robot::TeleopInit()
     //frc::SmartDashboard::PutNumber("Set Phi", 0);
     //frc::SmartDashboard::PutNumber("Swerve Volts", 0);
 
+    pneumaticHub_.EnableCompressorDigital();
+
     arm_.stop();
     arm_.resetIntaking();
 }
@@ -189,7 +191,6 @@ void Robot::TeleopPeriodic()
             arm_.stop();
         }
 
-        // TODO use right trigger for auto stuff
         /*if (controls_->aPressed())
         {
             arm_.setPosTo(TwoJointArmProfiles::PLAYER_STATION);
@@ -238,6 +239,8 @@ void Robot::TeleopPeriodic()
 
     frc::SmartDashboard::PutNumber("Theta", arm_.getTheta());
     frc::SmartDashboard::PutNumber("Phi", arm_.getPhi());
+    frc::SmartDashboard::PutNumber("Theta vel", arm_.getThetaVel());
+    frc::SmartDashboard::PutNumber("Phi vel", arm_.getPhiVel());
     // frc::SmartDashboard::PutNumber("Theta Volts", arm_.getThetaVolts());
     // frc::SmartDashboard::PutNumber("Phi Volts", arm_.getPhiVolts());
 }
@@ -247,6 +250,8 @@ void Robot::DisabledInit()
     arm_.stop();
     autoPaths_.setActionsSet(false);
     autoPaths_.setPathSet(false);
+
+    pneumaticHub_.DisableCompressor();
 }
 
 void Robot::DisabledPeriodic()

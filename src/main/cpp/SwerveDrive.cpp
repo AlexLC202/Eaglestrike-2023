@@ -29,7 +29,7 @@ void SwerveDrive::periodic(double yaw, Controls *controls)
 
     if (frc::DriverStation::IsTeleop())
     {
-        if (controls->lJoyTriggerPressed()) // TODO lJoyTriggerPressed
+        if (controls->lJoyTriggerPressed())
         {
             if (!trackingTag_)
             {
@@ -420,7 +420,7 @@ void SwerveDrive::calcModules(double xSpeed, double ySpeed, double xAcc, double 
 
     if (xSpeed != 0 || ySpeed != 0 || turn != 0)
     {
-        trAngle_ = -atan2(B, C) * 180 / pi; // TODO check
+        trAngle_ = -atan2(B, C) * 180 / pi; // TODO check B + BA
         tlAngle_ = -atan2(B, D) * 180 / pi;
         brAngle_ = -atan2(A, C) * 180 / pi;
         blAngle_ = -atan2(A, D) * 180 / pi;
@@ -606,10 +606,12 @@ void SwerveDrive::updateAprilTagFieldXY()
     double orientedTagX = tagX * cos(tagZAng) + tagY * sin(tagZAng);
     double orientedTagY = tagX * -sin(tagZAng) + tagY * cos(tagZAng);
 
-    // TODO check for bad id side wise
     if (tagID == -1)
     {
-        foundTag_ = false;
+        if(robotX_ > 3.919857 && robotX_ < 12.621893)
+        {
+            foundTag_ = false;
+        }
         return;
     }
     if (tagID < 1 || tagID > 8)
@@ -657,8 +659,8 @@ void SwerveDrive::updateAprilTagFieldXY()
     {
         if (abs(robotX_ - aprilTagX) < 1 && abs(robotY_ - aprilTagY) < 1) // TODO watch out here
         {
-            robotX_ += (-robotX_ + aprilTagX) * 0.02;
-            robotY_ += (-robotY_ + aprilTagY) * 0.02;
+            robotX_ += (-robotX_ + aprilTagX) * 0.05;
+            robotY_ += (-robotY_ + aprilTagY) * 0.05;
         }
     }
 }
@@ -682,7 +684,7 @@ int SwerveDrive::checkScoringPos() // TODO get better values
 
     if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
     {
-        if (robotX_ >= FieldConstants::TAG_XY[0][0])
+        if (robotX_ >= FieldConstants::TAG_XY[0][0]) //TODO make parameters better for all TAG_XY, probably make it check y first
         {
             if (robotY_ > FieldConstants::TAG_XY[2][1])
             {
@@ -696,6 +698,10 @@ int SwerveDrive::checkScoringPos() // TODO get better values
         else
         {
             if (robotY_ > FieldConstants::TAG_XY[2][1])
+            {
+                return -1;
+            }
+            else if(robotX_ > 3.919857)
             {
                 return -1;
             }
@@ -713,7 +719,7 @@ int SwerveDrive::checkScoringPos() // TODO get better values
     }
     else if (frc::DriverStation::GetAlliance() == frc::DriverStation::kRed)
     {
-        if (robotX_ <= FieldConstants::TAG_XY[5][0])
+        if (robotX_ <= FieldConstants::TAG_XY[5][0]) //TODO make parameters beter for all TAG_XY, probably make it check y first
         {
             if (robotY_ > FieldConstants::TAG_XY[2][1])
             {
@@ -727,6 +733,10 @@ int SwerveDrive::checkScoringPos() // TODO get better values
         else
         {
             if (robotY_ > FieldConstants::TAG_XY[2][1])
+            {
+                return -1;
+            }
+            else if(robotX_ < 12.621893)
             {
                 return -1;
             }
