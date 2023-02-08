@@ -11,6 +11,7 @@
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc/DriverStation.h>
+#include <frc/Compressor.h>
 #include "AHRS.h"
 #include "Constants.h"
 #include "Controls.h"
@@ -41,7 +42,8 @@ private:
     frc::SendableChooser<bool> sideChooser_;
 
     AHRS *navx_;
-    frc::PneumaticHub pneumaticHub_{1};
+    // frc::PneumaticHub pneumaticHub_{1};
+    frc::Compressor PCM{0, frc::PneumaticsModuleType::CTREPCM};
 
     Controls* controls_ = new Controls();
     SwerveDrive* swerveDrive_ = new SwerveDrive();

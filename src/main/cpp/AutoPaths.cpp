@@ -91,8 +91,8 @@ void AutoPaths::setPath(Path path)
             }
         }
 
-        swervePoints_.push_back(SwervePose(x1, y1, yaw1, 0));
-        swervePoints_.push_back(SwervePose(x2, y2, yaw2, 0));
+        swervePoints_.push_back(SwervePose(x1, y1, yaw1, 0.1));
+        swervePoints_.push_back(SwervePose(x2, y2, yaw2, 1.5)); //~5.2 is dist
         break;
     }
     case FIRST_CUBE:
@@ -149,8 +149,8 @@ void AutoPaths::setPath(Path path)
             }
         }
 
-        swervePoints_.push_back(SwervePose(x1, y1, yaw1, 0));
-        swervePoints_.push_back(SwervePose(x2, y2, yaw2, 0));
+        swervePoints_.push_back(SwervePose(x1, y1, yaw1, 0.1));
+        swervePoints_.push_back(SwervePose(x2, y2, yaw2, 1.5)); //~5.2 is dist
         break;
     }
     case SECOND_CONE:
@@ -403,7 +403,7 @@ void AutoPaths::setPath(Path path)
             x = FieldConstants::RED_AUTO_DOCK_X;
             yaw = 90;
         }
-        swervePoints_.push_back(SwervePose(x, y, yaw, 0));
+        swervePoints_.push_back(SwervePose(x, y, yaw, 0.5));
         break;
     }
     case NOTHING:

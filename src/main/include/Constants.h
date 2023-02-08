@@ -162,17 +162,17 @@ namespace TwoJointArmConstants
 	const double ELBOW_MIN_ANG = 0;
 	const double ELBOW_MAX_ANG = 200;
 
-	const double SHOULDER_ARM_MAX_VEL = 720;
-	const double ELBOW_ARM_MAX_VEL = 720;
-	const double SHOULDER_ARM_MAX_ACC = 360;
-	const double ELBOW_ARM_MAX_ACC = 360;
+	const double SHOULDER_ARM_MAX_VEL = 180;
+	const double ELBOW_ARM_MAX_VEL = 180*5;
+	const double SHOULDER_ARM_MAX_ACC = 180;
+	const double ELBOW_ARM_MAX_ACC = 180*5;
 
     const int SHOULDER_MASTER_ID = 6;
     const int SHOULDER_SLAVE_ID = 15;
     const int ELBOW_MASTER_ID = 8;
     const int ELBOW_SLAVE_ID = 1;
-    const int SHOULDER_BRAKE_ID = 8;
-    const int ELBOW_BRAKE_ID = 9;
+    const int SHOULDER_BRAKE_ID = 4;
+    const int ELBOW_BRAKE_ID = 5;
 
     const double UPPER_ARM_I = 0.19;
     const double FOREARM_I = 0.15;
@@ -186,10 +186,10 @@ namespace TwoJointArmConstants
     const double SHOULDER_I = UPPER_ARM_I + UPPER_ARM_M * UPPER_ARM_COM_DIST * UPPER_ARM_COM_DIST;
     const double ELBOW_I = FOREARM_I + FOREARM_M * FOREARM_COM_DIST * FOREARM_COM_DIST;
 
-    const double SHOULDER_KV = 0;
-    const double SHOULDER_KVI = 0;
-    const double ELBOW_KV = 0;
-    const double ELBOW_KVI = 0;
+    const double SHOULDER_KV = 11.6;
+    const double SHOULDER_KVI = -10;
+    const double ELBOW_KV = 42.352;
+    const double ELBOW_KVI = -30.8963;
 
     const double skD_ = 0;
     const double skP_ = 0.0;

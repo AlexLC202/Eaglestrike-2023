@@ -139,11 +139,12 @@ void Robot::AutonomousPeriodic()
 void Robot::TeleopInit()
 {
     frc::SmartDashboard::PutNumber("Test Volts", 0);
-    //frc::SmartDashboard::PutNumber("Set Theta", 0);
-    //frc::SmartDashboard::PutNumber("Set Phi", 0);
+    frc::SmartDashboard::PutNumber("Set Theta", 0);
+    frc::SmartDashboard::PutNumber("Set Phi", 0);
     //frc::SmartDashboard::PutNumber("Swerve Volts", 0);
 
-    pneumaticHub_.EnableCompressorDigital();
+    // pneumaticHub_.EnableCompressorDigital();
+    PCM.EnableDigital();
 
     arm_.stop();
     arm_.resetIntaking();
@@ -178,20 +179,21 @@ void Robot::TeleopPeriodic()
     }
     else
     {
-        if(controls_->aPressed())
-        {
-            arm_.goToPos(frc::SmartDashboard::GetNumber("Set Theta", 0), frc::SmartDashboard::GetNumber("Set Phi", 0));
-        }
-        else
-        {
-            arm_.manualControl(0, 0);
-        } //HERE
-        if(arm_.getState() == TwoJointArm::MANUAL)
-        {
-            arm_.stop();
-        }
+        // if(controls_->aPressed())
+        // {
+        //     arm_.goToPos(frc::SmartDashboard::GetNumber("Set Theta", 0), frc::SmartDashboard::GetNumber("Set Phi", 0));
+        // }
+        // else
+        // {
+        //     //arm_.stop();
+        // }
 
-        /*if (controls_->aPressed())
+        // if(arm_.getState() == TwoJointArm::MANUAL)
+        // {
+        //     arm_.stop();
+        // }
+
+        if (controls_->aPressed())
         {
             arm_.setPosTo(TwoJointArmProfiles::PLAYER_STATION);
         }
@@ -220,7 +222,7 @@ void Robot::TeleopPeriodic()
         if (controls_->dPadUpPressed())
         {
             arm_.toggleForward(); // COULDO technically spams it when down. Maybe polish
-        }*/
+        }
     }
 
     if (controls_->lBumperPressed())
@@ -250,8 +252,8 @@ void Robot::DisabledInit()
     arm_.stop();
     autoPaths_.setActionsSet(false);
     autoPaths_.setPathSet(false);
-
-    pneumaticHub_.DisableCompressor();
+    PCM.Disable();
+    // pneumaticHub_.DisableCompressor();
 }
 
 void Robot::DisabledPeriodic()
