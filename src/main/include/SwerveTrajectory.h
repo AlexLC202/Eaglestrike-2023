@@ -3,7 +3,7 @@
 #include "SwervePose.h"
 #include "Helpers.h"
 #include "Constants.h"
-#include <math.h>
+#include <cmath>
 
 using namespace std;
 

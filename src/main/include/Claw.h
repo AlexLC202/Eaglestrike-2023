@@ -2,7 +2,7 @@
 
 #include <ctre/Phoenix.h>
 #include <iostream>
-#include <math.h>
+#include <cmath>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <string.h>
 #include <frc/Solenoid.h>

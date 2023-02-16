@@ -53,4 +53,6 @@ private:
 
     TwoJointArm arm_;
 
+    bool cubeIntaking_, coneIntaking_;
+
 };

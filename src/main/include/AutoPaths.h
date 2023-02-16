@@ -5,6 +5,7 @@
 #include "SwerveDrive.h"
 #include "SwervePath.h"
 #include "Constants.h"
+#include "TwoJointArmProfiles.h"
 #include <vector>
 
 class AutoPaths
@@ -38,6 +39,11 @@ class AutoPaths
         int pointNum();
 
         void setMirrored(bool mirrored);
+
+        bool getClawOpen();
+        bool getForward();
+        double getWheelSpeed();
+        TwoJointArmProfiles::Positions getArmPosition();
     private:
         vector<Path> actions_;
         Path path_;
@@ -60,4 +66,8 @@ class AutoPaths
 
         void setPath(Path path);
         Path getPath();
+
+        bool clawOpen_, forward_;
+        double wheelSpeed_;
+        TwoJointArmProfiles::Positions armPosition_;
 };

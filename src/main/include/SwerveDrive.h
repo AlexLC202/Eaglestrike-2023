@@ -2,7 +2,7 @@
 
 #include <ctre/Phoenix.h>
 #include <iostream>
-#include <math.h>
+#include <cmath>
 #include "Controls.h"
 #include "Constants.h"
 #include "SwervePose.h"
@@ -63,6 +63,6 @@ class SwerveDrive
         double trSpeed_, brSpeed_, tlSpeed_, blSpeed_, trAngle_, brAngle_, tlAngle_, blAngle_;
 
         bool trackingTag_, foundTag_;
-        int setTagPos_, prevTag_;
+        int setTagPos_, prevTag_, prevUniqueVal_;
 
 };

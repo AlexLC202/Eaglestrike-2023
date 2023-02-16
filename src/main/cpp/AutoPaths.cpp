@@ -716,6 +716,8 @@ void AutoPaths::periodic(SwerveDrive *swerveDrive)
     case PRELOADED_CONE:
     {
         // TODO place cone
+        armPosition_ = TwoJointArmProfiles::HIGH;
+        clawOpen_ = 
         pointOver = true;
         nextPointReady_ = true;
         break;
@@ -967,4 +969,21 @@ int AutoPaths::pointNum()
 void AutoPaths::setMirrored(bool mirrored)
 {
     mirrored_ = mirrored;
+}
+
+bool AutoPaths::getClawOpen()
+{
+    return clawOpen_;
+}
+bool AutoPaths::getForward()
+{
+    return forward_;
+}
+double AutoPaths::getWheelSpeed()
+{
+    return wheelSpeed_;
+}
+TwoJointArmProfiles::Positions AutoPaths::getArmPosition()
+{
+    return armPosition_;
 }

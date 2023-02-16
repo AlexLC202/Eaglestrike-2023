@@ -4,7 +4,7 @@
 #include "SwerveTrajectory.h"
 #include "SwervePose.h"
 #include "Helpers.h"
-#include "math.h"
+#include "cmath"
 #include "iostream"
 
 using namespace std;

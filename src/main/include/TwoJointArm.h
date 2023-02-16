@@ -2,7 +2,7 @@
 
 #include <ctre/Phoenix.h>
 #include <iostream>
-#include <math.h>
+#include <cmath>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <string.h>
 #include <frc/Solenoid.h>
@@ -62,12 +62,16 @@ class TwoJointArm
         string getStateString();
         string getPosString();
 
-        void goToPos(double thetaPos, double phiPos); //HERE
+        //void goToPos(double thetaPos, double phiPos); //HERE
         // double getThetaVolts();
         // double getPhiVolts();
 
-        void toggleClaw();
+        bool getClawOpen();
+        void setClaw(bool open);
         void setClawWheels(double speed);
+        void setEStopped(bool eStopped);
+        bool isEStopped();
+        pair<bool, bool> intakesNeededDown();
 
     private:
         // WPI_TalonFX shoulderMaster_;
@@ -104,7 +108,7 @@ class TwoJointArm
 
         State state_;
 
-        bool posUnknown_, shoulderBrakeEngaged_, elbowBrakeEngaged_, forward_, switchingDirections_, intaking_, gettingCone_, gotCone_;
+        bool posUnknown_, shoulderBrakeEngaged_, elbowBrakeEngaged_, forward_, switchingDirections_, intaking_, gettingCone_, gotCone_, eStopped_, cubeIntakeNeededDown_, coneIntakeNeededDown_;
         pair<bool, bool> homing_;
         double prevShoulderVolts_, prevElbowVolts_;
         double prevElbowPos_, elbowVel_, elbowVelTime_, prevShoulderPos_, shoulderVel_, shoulderVelTime_;
@@ -130,5 +134,5 @@ class TwoJointArm
 
         void setBrakes(bool shoulder, bool elbow);
 
-        double setPhiPos_, setThetaPos_; //HERE
+        //double setPhiPos_, setThetaPos_; //HERE
 };

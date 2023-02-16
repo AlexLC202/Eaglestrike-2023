@@ -1,9 +1,9 @@
 #pragma once
 
-#include <math.h>
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include "string"
 #include "frc/Filesystem.h"
-#include "rev/ColorSensorV3.h"
 
 using namespace std;
 
@@ -36,6 +36,10 @@ namespace FieldConstants
     // const double MIDDLE_TAG_X = 2.72923; //107.45 in
     // const double RIGHT_TAG_X = 4.40563; //173.45;
 
+    /**
+     * Tag Positions in the form of 
+     * TAG_XY[TagID -1] = {x, y}
+    */
     const double TAG_XY[8][2] = {
     {15.513558, 1.071626}, 
     {15.513558, 2.748026}, 
@@ -87,6 +91,7 @@ namespace InputConstants
 
     const int OUTAKE_BUTTON = 3;
     const int INTAKE_BUTTON = 4;
+    const int LOWER_BUTTON = 5; //TODO get value
     
     const int A_BUTTON = 1;
     const int B_BUTTON = 2;
@@ -160,6 +165,8 @@ namespace SwerveConstants
     const double kaP = 0.06; //0.008
     const double kaD = 0;
 
+    const double CLAW_MID_OFFSET = 0.0889;
+
 }
 
 namespace TwoJointArmConstants
@@ -168,16 +175,26 @@ namespace TwoJointArmConstants
 	const double FOREARM_LENGTH = 0.6985; //0.7112 for prototype, 0.6985 for real
     const double EE_LENGTH = 0.3683;
     const double MOUNTING_HEIGHT = 0.4318;
+    const double CUBE_INTAKE_PIVOT_TO_SHOULDER_HEGHT = 0.3622548;
+    const double CUBE_INTAKE_LENGTH = 0.403195028;;
+    const double CUBE_INTAKE_TO_SHOULDER_X = 0.29856176;
+    const double CUBE_INTAKE_COLLISION_BUFFER = 0.2032;
+    const double CONE_INTAKE_PIVOT_TO_SHOULDER_HEGHT = 0.3622548; //TODO get different stuffs with cone intake
+    const double CONE_INTAKE_LENGTH = 0.403195028;;
+    const double CONE_INTAKE_TO_SHOULDER_X = 0.29856176;
+    const double CONE_INTAKE_COLLISION_BUFFER = 0.2032;
+
+    const double COLLISION_LOOKAHEAD_TIME = 0.65;
 	
 	const double SHOULDER_MIN_ANG = -90;
 	const double SHOULDER_MAX_ANG = 90;
 	const double ELBOW_MIN_ANG = 0;
 	const double ELBOW_MAX_ANG = 360;
 
-	const double SHOULDER_ARM_MAX_VEL = 180;
-	const double ELBOW_ARM_MAX_VEL = 180*5;
-	const double SHOULDER_ARM_MAX_ACC = 180;
-	const double ELBOW_ARM_MAX_ACC = 180*5;
+	const double SHOULDER_ARM_MAX_VEL = 50;
+	const double ELBOW_ARM_MAX_VEL = 180;
+	const double SHOULDER_ARM_MAX_ACC = 50;
+	const double ELBOW_ARM_MAX_ACC = 180;
 
     const int SHOULDER_MASTER_ID = 6;
     const int SHOULDER_SLAVE_ID = 15;
@@ -186,7 +203,7 @@ namespace TwoJointArmConstants
     const int SHOULDER_BRAKE_ID = 4;
     const int ELBOW_BRAKE_ID = 5;
     const int SHOULDER_ENCODER_ID = 0;
-    const double SHOULDER_ENCODER_OFFSET = 0;
+    const double SHOULDER_ENCODER_OFFSET = -191;
 
     const double UPPER_ARM_I = 0.19;
     const double FOREARM_I = 0.15;
@@ -269,7 +286,7 @@ namespace TwoJointArmConstants
     {
         {0.181286, -0.35166, 9.72, 167.11}, //stowed
         {0.52316, -0.31130, 14.72, 146.74}, //cube intake
-        {0.74178, 0.32868, -21.74, 130.54}, //player station
+        {0.622223038, 0.37798756, -35.85, 137.13}, //player station {0.622223038, 0.37798756, -35.85, 137.13} for real, {0.74178, 0.32868, -21.74, 130.54} for linear
         {1.15245, 0.3682, 11.3, 97.38}, //mid
         {1.6045, 0.7533, 54.93, 16.63}, //high
         {0.82036, 0.2747, -12.35, 126.27}, //cube mid
@@ -288,6 +305,8 @@ namespace TwoJointArmConstants
 
     const double ANGLE_ERROR_THRESHOLD = 5; //TODO check value
 
+    const double STALL_SAFETY = 30;
+
 }
 
 namespace ClawConstants
@@ -297,3 +316,23 @@ namespace ClawConstants
     const double INTAKING_SPEED = 0.5;
     const double OUTAKING_SPEED = -0.1;
 }
+
+namespace CubeIntakeConstants {
+    const int DEPLOYER_MOTOR_ID = 0; // TODO get value
+    const int ROLLER_MOTOR_ID = 0; // TODO get value
+
+    const double ENCODER_DEPLOYED_TARGET = 512;
+
+    const double DEPLOYER_MAX_VOLTAGE = 0;    // TODO measure capped voltage for deployer
+    const double ROLLER_MAX_VOLTAGE = 0;      // TODO measure voltage for cube to actually pass through
+
+    const double kP = 0; // TODO tune
+    const double kI = 0; // TODO tune
+    const double kD = 0; // TODO tune
+
+    const double MAX_VELOCITY = M_PI / 2;   // TODO tune - radians per second
+    const double MAX_ACCELERATION = M_PI;   // TODO tune - radians per second squared
+
+    const double POS_ERR_TOLERANCE = 0.01;  // TODO tune - error tolerance, in radians
+    const double VEL_ERR_TOLERANCE = 0.1;   // TODO tune - error tolerance, in radians/s
+} // namespace CubeIntakeConstants
