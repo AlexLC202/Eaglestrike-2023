@@ -42,16 +42,15 @@ private:
     frc::SendableChooser<bool> sideChooser_;
 
     AHRS *navx_;
-    // frc::PneumaticHub pneumaticHub_{1};
     frc::Compressor PCM{0, frc::PneumaticsModuleType::CTREPCM};
 
     Controls* controls_ = new Controls();
     SwerveDrive* swerveDrive_ = new SwerveDrive();
+    TwoJointArm* arm_ = new TwoJointArm();
     AutoPaths autoPaths_;
 
     double yawOffset_;
 
-    TwoJointArm arm_;
 
     bool cubeIntaking_, coneIntaking_;
 

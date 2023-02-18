@@ -189,7 +189,7 @@ void SwerveDrive::periodic(double yaw, Controls *controls, bool forward)
             tuple<double, double, double> yawProfile = yawTagTraj_.getProfile();
             if(get<0>(xProfile) == 0 && get<0>(yProfile) == 0 && get<0>(yawProfile) == 0 && get<1>(xProfile) == 0 && get<1>(yProfile) == 0 && get<1>(yawProfile) == 0)
             {
-                if(abs(robotX_ - get<2>(xProfile)) > 0.15 || abs(robotY_ - get<2>(yProfile)) > 0.15)
+                if(abs(robotX_ - get<2>(xProfile)) > 0.08 || abs(robotY_ - get<2>(yProfile)) > 0.08)
                 {
                     trackingTag_ = false;
                     return;

@@ -1,6 +1,7 @@
 #include <cmath>
 
 #include <units/angle.h>
+#include "Constants.h"
 
 namespace Helpers
 {

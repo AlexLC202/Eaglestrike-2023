@@ -104,13 +104,13 @@ namespace InputConstants
 
     const int BUTTON_BOARD_PORT = 3;
     const int B1 = 1;
-    const int B2 = 2;
-    const int B3 = 3;
-    const int B4 = 4;
+    const int B2 = 4;
+    const int B3 = 7;
+    const int B4 = 2;
     const int B5 = 5;
-    const int B6 = 6;
-    const int B7 = 7;
-    const int B8 = 8;
+    const int B6 = 8;
+    const int B7 = 3;
+    const int B8 = 6;
     const int B9 = 9;
 
 }
@@ -171,9 +171,9 @@ namespace SwerveConstants
 
 namespace TwoJointArmConstants
 {
-	const double UPPER_ARM_LENGTH = 0.7239; //0.635 for prototype, 0.7239 for real
-	const double FOREARM_LENGTH = 0.6985; //0.7112 for prototype, 0.6985 for real
-    const double EE_LENGTH = 0.3683;
+	const double UPPER_ARM_LENGTH = 0.7239; //0.7239 for real
+	const double FOREARM_LENGTH = 0.6985; //0.6985 for real
+    const double EE_LENGTH = 0.3429; //0.3429 for 13.5
     const double MOUNTING_HEIGHT = 0.4318;
     const double CUBE_INTAKE_PIVOT_TO_SHOULDER_HEGHT = 0.3622548;
     const double CUBE_INTAKE_LENGTH = 0.403195028;;
@@ -203,24 +203,24 @@ namespace TwoJointArmConstants
     const int SHOULDER_BRAKE_ID = 4;
     const int ELBOW_BRAKE_ID = 5;
     const int SHOULDER_ENCODER_ID = 0;
-    const double SHOULDER_ENCODER_OFFSET = -191;
+    const double SHOULDER_ENCODER_OFFSET = -311;
 
-    const double UPPER_ARM_I = 0.19;
-    const double FOREARM_I = 0.15;
+    const double UPPER_ARM_I = 0.206;
+    const double FOREARM_I = 0.22; //0.32, 0.35?
 
-    const double UPPER_ARM_M = 2.53; //2.53, 0.114
-    const double FOREARM_M = 1.41; //1.41, 0.114
+    const double UPPER_ARM_M = 1.937; //2.53, 0.114
+    const double FOREARM_M = 3.196; //1.41, 0.114
 
-    const double UPPER_ARM_COM_DIST = 0.304; //0.304, 0.381
-    const double FOREARM_COM_DIST = 0.26; //0.26, 0.381
+    const double UPPER_ARM_COM_DIST = 0.29; //0.304, 0.381
+    const double FOREARM_COM_DIST = 0.63; //0.26, 0.381
 
     const double SHOULDER_I = UPPER_ARM_I + UPPER_ARM_M * UPPER_ARM_COM_DIST * UPPER_ARM_COM_DIST;
     const double ELBOW_I = FOREARM_I + FOREARM_M * FOREARM_COM_DIST * FOREARM_COM_DIST;
 
-    const double SHOULDER_KV = 13.0357;
-    const double SHOULDER_KVI = -13.1786;
-    const double ELBOW_KV = 42.352;
-    const double ELBOW_KVI = -30.8963;
+    const double SHOULDER_KV = 13.6664;
+    const double SHOULDER_KVI = -10.6125;
+    const double ELBOW_KV = 43.4462;
+    const double ELBOW_KVI = -29.9439;
 
     const double skD_ = 0.05;
     const double skP_ = 0.05;
@@ -234,64 +234,28 @@ namespace TwoJointArmConstants
     const double HIGH_CUBE_OUTAKE_VOLTS = -1;
     const double MID_CUBE_OUTAKE_VOLTS = -1;
 
-    // //stowed
-	// const double sX = 0.17136;
-	// const double sY = -0.33516;
-	// const double sTheta = 8.22;
-	// const double sPhi = 167.95;
-
-	// //cube intake
-	// const double ciX = 0.531859;
-	// const double ciY = -0.330244;
-	// const double ciTheta = 19.73;
-	// const double ciPhi = 144;
-
-	// //player station
-	// const double psX = 0.58348;
-	// const double psY = 0.391336;
-	// const double psTheta = -38.74;
-	// const double psPhi = 137.76;
-
-	// //mid
-	// const double mX = 1.17477;
-	// const double mY = 0.3640;
-	// const double mTheta = 15.05;
-	// const double mPhi = 93.01;
-
-	// //high
-	// const double hX = 1.5710;
-	// const double hY = 0.73798;
-	// const double hTheta = 55.2;
-	// const double hPhi = 16.2;
-
-    // //cube mid
-	// const double cmX = 0.8245;
-	// const double cmY = 0.27752;
-	// const double cmTheta = -10.32;
-	// const double cmPhi = 124.24;
-
-	// //cube high
-	// const double chX = 1.2543;
-	// const double chY = 0.53706;
-	// const double chTheta = 18.2;
-	// const double chPhi = 79.44;
-
-	// //cone intake
-	// const double iX = 0.531859;
-	// const double iY = -0.330244;
-	// const double iTheta = 19.73;
-	// const double iPhi = 144;
+    // const double ARM_POSITIONS[8][4] = 
+    // {
+    //     {0.181286, -0.35166, 9.72, 167.11}, //stowed, -18.5, 164.5
+    //     {0.52316, -0.31130, 14.72, 146.74}, //cube intake, 15, 140
+    //     {0.61308, 0.508, -38.66, 131.74}, //player station, -16, 109
+    //     {1.15245, 0.3682, 11.3, 97.38}, //mid, 2.6, 92
+    //     {1.6045, 0.7533, 54.93, 16.63}, //high, 41, 22
+    //     {0.82036, 0.2747, -12.35, 126.27}, //cube mid, -3, 117
+    //     {1.26966, 0.5426368, 17.14, 80.9}, //cube high, 22, 67
+    //     {0.52316, -0.31130, 14.72, 146.74} //cone intake, 
+    // };
 
     const double ARM_POSITIONS[8][4] = 
     {
-        {0.181286, -0.35166, 9.72, 167.11}, //stowed
-        {0.52316, -0.31130, 14.72, 146.74}, //cube intake
-        {0.622223038, 0.37798756, -35.85, 137.13}, //player station {0.622223038, 0.37798756, -35.85, 137.13} for real, {0.74178, 0.32868, -21.74, 130.54} for linear
-        {1.15245, 0.3682, 11.3, 97.38}, //mid
-        {1.6045, 0.7533, 54.93, 16.63}, //high
-        {0.82036, 0.2747, -12.35, 126.27}, //cube mid
-        {1.26966, 0.5426368, 17.14, 80.9}, //cube high
-        {0.52316, -0.31130, 14.72, 146.74} //cone intake
+        {0.3526, -0.1769, -18.5, 164.5}, //stowed, -18.5, 164.5
+        {0.62747, -0.2446, 15, 140}, //cube intake, 15, 140
+        {0.84044, 0.64135, -16, 109}, //player station, -16, 109
+        {1.07418, 0.71225, 2.6, 92}, //mid, 2.6, 92
+        {1.40282, 1.01912, 41, 22}, //high, 41, 22
+        {0.91348, 0.29933, -3, 117}, //cube mid, -3, 117
+        {1.31242, 0.68936, 22, 67}, //cube high, 22, 67
+        {0.62747, -0.2446, 15, 140} //cone intake, 
     };
 
     const int STOWED_NUM = 0;
@@ -303,18 +267,21 @@ namespace TwoJointArmConstants
     const int CUBE_HIGH_NUM = 6;
     const int CONE_INTAKE_NUM = 7;
 
-    const double ANGLE_ERROR_THRESHOLD = 5; //TODO check value
+    const double ANGLE_ERROR_THRESHOLD = 3;
+    const double ANGLE_POS_KNOWN_THRESHOLD = 5;
 
-    const double STALL_SAFETY = 30;
+    const double STALL_SAFETY = 50;
 
 }
 
 namespace ClawConstants
 {
-    const int PNEUMATIC_ID = 0; //TODO get value
-    const int WHEEL_MOTOR_ID = 11;
-    const double INTAKING_SPEED = 0.5;
+    const int PNEUMATIC_ID = 6; //TODO get value
+    const int WHEEL_MOTOR_ID = 24;
+    const double INTAKING_SPEED = 1.5;
     const double OUTAKING_SPEED = -0.1;
+    const double RETAINING_SPEED = 0.5;
+    const double RETAINING_CURRENT = 7;
 }
 
 namespace CubeIntakeConstants {
@@ -330,8 +297,8 @@ namespace CubeIntakeConstants {
     const double kI = 0; // TODO tune
     const double kD = 0; // TODO tune
 
-    const double MAX_VELOCITY = M_PI / 2;   // TODO tune - radians per second
-    const double MAX_ACCELERATION = M_PI;   // TODO tune - radians per second squared
+    const double MAX_VELOCITY = pi / 2;   // TODO tune - radians per second
+    const double MAX_ACCELERATION = pi;   // TODO tune - radians per second squared
 
     const double POS_ERR_TOLERANCE = 0.01;  // TODO tune - error tolerance, in radians
     const double VEL_ERR_TOLERANCE = 0.1;   // TODO tune - error tolerance, in radians/s

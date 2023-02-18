@@ -49,5 +49,5 @@ class Controls
         frc::Joystick xbox_;
         frc::Joystick buttonBoard_;
 
-        bool dPadLeftDown_, dPadRightDown_;
+        bool dPadLeftDown_, dPadRightDown_, intakeDown_, outakeDown_;
 };

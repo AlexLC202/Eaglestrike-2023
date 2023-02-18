@@ -62,7 +62,7 @@ class TwoJointArm
         string getStateString();
         string getPosString();
 
-        //void goToPos(double thetaPos, double phiPos); //HERE
+        void goToPos(double thetaPos, double phiPos); //HERE
         // double getThetaVolts();
         // double getPhiVolts();
 
@@ -72,6 +72,9 @@ class TwoJointArm
         void setEStopped(bool eStopped);
         bool isEStopped();
         pair<bool, bool> intakesNeededDown();
+
+        double getClawWheelSpeed();
+        bool clawOpen();
 
     private:
         // WPI_TalonFX shoulderMaster_;
@@ -134,5 +137,5 @@ class TwoJointArm
 
         void setBrakes(bool shoulder, bool elbow);
 
-        //double setPhiPos_, setThetaPos_; //HERE
+        double setPhiPos_, setThetaPos_; //HERE
 };

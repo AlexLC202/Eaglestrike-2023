@@ -4,6 +4,8 @@ Controls::Controls() : lJoy_{InputConstants::LJOY_PORT}, rJoy_{InputConstants::R
 {
     dPadLeftDown_ = false;
     dPadRightDown_ = false;
+    intakeDown_ = false;
+    outakeDown_ = false;
 }
 
 void Controls::periodic()
@@ -119,12 +121,12 @@ bool Controls::lXTriggerPressed()
 
 bool Controls::outakePressed()
 {
-    return rJoy_.GetRawButton(InputConstants::OUTAKE_BUTTON);
+    return rJoy_.GetRawButtonPressed(InputConstants::OUTAKE_BUTTON);
 }
 
 bool Controls::intakePressed()
 {
-    return rJoy_.GetRawButton(InputConstants::INTAKE_BUTTON);
+    return lJoy_.GetRawButtonPressed(InputConstants::INTAKE_BUTTON);
 }
 
 bool Controls::lLowerButtonPressed()
@@ -185,18 +187,18 @@ bool Controls::dPadLeftPressed()
 bool Controls::dPadRightPressed()
 {
     bool down = (xbox_.GetPOV() < 100 && xbox_.GetPOV() > 80);
-    if (down && !dPadLeftDown_)
+    if (down && !dPadRightDown_)
     {
-        dPadLeftDown_ = true;
+        dPadRightDown_ = true;
         return true;
     }
-    else if (dPadLeftDown_ && down)
+    else if (dPadRightDown_ && down)
     {
         return false;
     }
     else
     {
-        dPadLeftDown_ = false;
+        dPadRightDown_ = false;
         return false;
     }
 
