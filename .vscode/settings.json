@@ -28,6 +28,7 @@
     "initializer_list": "cpp",
     "span": "cpp",
     "regex": "cpp",
-    "iostream": "cpp"
+    "iostream": "cpp",
+    "cmath": "cpp"
   }
 }

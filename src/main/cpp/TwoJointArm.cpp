@@ -85,6 +85,7 @@ void TwoJointArm::periodic()
         // {
         //     setClawWheels(0);
         // }
+        checkPos();
         if (posUnknown_)
         {
             state_ = STOPPED;
@@ -396,8 +397,8 @@ void TwoJointArm::followTaskSpaceProfile(double time)
     double wantedThetaAcc = get<2>(thetaProfile);
     double wantedPhiAcc = get<2>(phiProfile);
 
-    frc::SmartDashboard::PutNumber("WTheta", wantedTheta);
-    frc::SmartDashboard::PutNumber("WPhi", wantedPhi);
+    // frc::SmartDashboard::PutNumber("WTheta", wantedTheta);
+    // frc::SmartDashboard::PutNumber("WPhi", wantedPhi);
 
     double theta = getTheta();
     double phi = getPhi();
@@ -648,6 +649,7 @@ void TwoJointArm::home()
             position_ = TwoJointArmProfiles::STOWED;
             if (abs(theta - wantedTheta) > 20 || abs(phi - wantedPhi) > 20) // TODO get values
             {
+                posUnknown_ = true;
                 state_ = STOPPED;
             }
             else if (abs(theta - wantedTheta) > TwoJointArmConstants::ANGLE_ERROR_THRESHOLD || abs(phi - wantedPhi) > TwoJointArmConstants::ANGLE_ERROR_THRESHOLD)
@@ -740,11 +742,11 @@ void TwoJointArm::manualControl(double thetaVel, double phiVel)
 
     double gravityTorque = calcElbowGravityTorque(getTheta(), getPhi(), false);
     phiVolts += gravityTorque * -0.0165; //-0.012 for pvc no claw
-    frc::SmartDashboard::PutNumber("ET", gravityTorque);
+    // frc::SmartDashboard::PutNumber("ET", gravityTorque);
 
     double shoulderGravityTorque = calcShoulderGravityTorque(getTheta(), getPhi(), false);
     thetaVolts += shoulderGravityTorque * 0;
-    frc::SmartDashboard::PutNumber("ST", shoulderGravityTorque);
+    // frc::SmartDashboard::PutNumber("ST", shoulderGravityTorque);
 
     if (abs(thetaVel * 2 / TwoJointArmConstants::SHOULDER_ARM_MAX_VEL) < 0.2)
     {
@@ -1087,18 +1089,14 @@ void TwoJointArm::setElbowVolts(double volts)
 
 double TwoJointArm::getTheta()
 {
-    // return -shoulderMaster_.GetSelectedSensorPosition() * (360.0 / 4096.0); // HERE
-    //  TODO with encoders, don't forget switching sides
-    // double theta = shoulderMaster_.GetSelectedSensorPosition() / 2048 * 360 * TwoJointArmConstants::MOTOR_TO_SHOULDER_RATIO;
-    double theta = (shoulderEncoder_.GetAbsolutePosition() * 360.0) + TwoJointArmConstants::SHOULDER_ENCODER_OFFSET;
+    //double theta = shoulderMaster_.GetSelectedSensorPosition() / 2048 * 360 * TwoJointArmConstants::MOTOR_TO_SHOULDER_RATIO;
+    double theta = -((shoulderEncoder_.GetAbsolutePosition() * 360.0) + TwoJointArmConstants::SHOULDER_ENCODER_OFFSET);
     Helpers::normalizeAngle(theta);
     return (forward_) ? theta : -theta;
 }
 
 double TwoJointArm::getPhi()
 {
-    // return elbowMaster_.GetSelectedSensorPosition() * (360.0 / 4096.0) - getTheta(); // HERE
-    //  TODO with encoders, don't forget switching sides
     if (forward_)
     {
         return elbowMaster_.GetSelectedSensorPosition() / 2048 * 360 * TwoJointArmConstants::MOTOR_TO_ELBOW_RATIO * TwoJointArmConstants::SHOULDER_TO_ELBOW_RATIO - (getTheta() * TwoJointArmConstants::SHOULDER_TO_ELBOW_RATIO);
@@ -1272,6 +1270,16 @@ string TwoJointArm::getPosString()
     case TwoJointArmProfiles::HIGH:
     {
         return "High";
+        break;
+    }
+    case TwoJointArmProfiles::CUBE_MID:
+    {
+        return "Cube Mid";
+        break;
+    }
+    case TwoJointArmProfiles::CUBE_HIGH:
+    {
+        return "Cube High";
         break;
     }
     case TwoJointArmProfiles::CONE_INTAKE:

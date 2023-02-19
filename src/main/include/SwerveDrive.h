@@ -2,7 +2,7 @@
 
 #include <ctre/Phoenix.h>
 #include <iostream>
-#include <cmath>
+#include <math.h>
 #include "Controls.h"
 #include "Constants.h"
 #include "SwervePose.h"
@@ -20,12 +20,12 @@ class SwerveDrive
         SwerveDrive();
         void setYaw(double yaw);
         
-        void periodic(double yaw, Controls* controls, bool forward);
+        void periodic(double yaw, Controls* controls, bool forward, bool panic);
         void drive(double xSpeed, double ySpeed, double turn);
         void drivePose(SwervePose pose);
         void adjustPos(SwervePose pose);
 
-        void calcModules(double xSpeed, double ySpeed, double xAcc, double yAcc, double turn, double turnAacc, bool inVolts);
+        void calcModules(double xSpeed, double ySpeed, /*double xAcc, double yAcc,*/ double turn, /*double turnAacc,*/ bool inVolts);
 
         void calcOdometry();
         void reset();

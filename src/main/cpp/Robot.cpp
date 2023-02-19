@@ -22,13 +22,20 @@ Robot::Robot() : autoPaths_(swerveDrive_, arm_)
             {
                 autoPaths_.periodic(swerveDrive_);
             }
-            // swerveDrive_->periodic(yaw, controls_, arm_->isForward());
-
-            if (frc::DriverStation::IsEnabled())
+            else
             {
                 arm_->periodic();
-                swerveDrive_->periodic(yaw, controls_, arm_->isForward());
+                bool armMoving = (arm_->getState() != TwoJointArm::STOPPED && arm_->getState() != TwoJointArm::HOLDING_POS);
+                bool armOut = (arm_->getPosition() != TwoJointArmProfiles::STOWED && arm_->getPosition() != TwoJointArmProfiles::CONE_INTAKE && arm_->getPosition() != TwoJointArmProfiles::CUBE_INTAKE);
+                swerveDrive_->periodic(yaw, controls_, arm_->isForward(), (armMoving || armOut));
             }
+
+            // if (frc::DriverStation::IsEnabled())
+            // {
+            //     arm_->periodic();
+            //     bool armMoving = (arm_->getState() != TwoJointArm::STOPPED && arm_->getState() != TwoJointArm::HOLDING_POS);
+            //     swerveDrive_->periodic(yaw, controls_, arm_->isForward(), armMoving);
+            // }
         },
         5_ms, 2_ms);
 }
@@ -44,19 +51,21 @@ void Robot::RobotInit()
     auto1Chooser_.AddOption("Auto Dock", AutoPaths::AUTO_DOCK);
     auto1Chooser_.AddOption("Nothing", AutoPaths::NOTHING);
     auto1Chooser_.AddOption("Drive Back Dumb", AutoPaths::DRIVE_BACK_DUMB);
-    auto1Chooser_.AddOption("BIG BOY", AutoPaths::BIG_BOY);
+    //auto1Chooser_.AddOption("BIG BOY", AutoPaths::BIG_BOY);
+    auto1Chooser_.AddOption("Wait Five Seconds", AutoPaths::WAIT_5_SECONDS);
     frc::SmartDashboard::PutData("First Auto Stage", &auto1Chooser_);
 
     auto2Chooser_.SetDefaultOption("First Cube", AutoPaths::FIRST_CUBE);
     // auto2Chooser_.AddOption("Preloaded Cone", AutoPaths::PRELOADED_CONE);
     // auto2Chooser_.AddOption("Preloaded Cube", AutoPaths::PRELOADED_CUBE);
-    auto2Chooser_.AddOption("First Cone", AutoPaths::FIRST_CONE);
+    //auto2Chooser_.AddOption("First Cone", AutoPaths::FIRST_CONE); //this
     // auto2Chooser_.AddOption("Second", AutoPaths::SECOND_CONE);
     // auto2Chooser_.AddOption("Second Cube", AutoPaths::SECOND_CUBE);
     auto2Chooser_.AddOption("Auto Dock", AutoPaths::AUTO_DOCK);
     auto2Chooser_.AddOption("Nothing", AutoPaths::NOTHING);
     auto2Chooser_.AddOption("Drive Back Dumb", AutoPaths::DRIVE_BACK_DUMB);
-    auto2Chooser_.AddOption("BIG BOY", AutoPaths::BIG_BOY);
+    //auto2Chooser_.AddOption("BIG BOY", AutoPaths::BIG_BOY);
+    auto2Chooser_.AddOption("Wait Five Seconds", AutoPaths::WAIT_5_SECONDS);
     frc::SmartDashboard::PutData("Second Auto Stage", &auto2Chooser_);
 
     auto3Chooser_.SetDefaultOption("AUTO_DOCK", AutoPaths::AUTO_DOCK);
@@ -64,11 +73,12 @@ void Robot::RobotInit()
     // auto3Chooser_.AddOption("Preloaded Cone", AutoPaths::PRELOADED_CONE);
     // auto3Chooser_.AddOption("Preloaded Cube", AutoPaths::FIRST_CONE);
     // auto3Chooser_.AddOption("Preloaded Cube", AutoPaths::FIRST_CUBE);
-    auto3Chooser_.AddOption("Second Cone", AutoPaths::SECOND_CONE);
+    //auto3Chooser_.AddOption("Second Cone", AutoPaths::SECOND_CONE); //this
     auto3Chooser_.AddOption("Second Cube", AutoPaths::SECOND_CUBE);
     auto3Chooser_.AddOption("Nothing", AutoPaths::NOTHING);
     auto3Chooser_.AddOption("Drive Back Dumb", AutoPaths::DRIVE_BACK_DUMB);
-    auto3Chooser_.AddOption("BIG BOY", AutoPaths::BIG_BOY);
+    //auto3Chooser_.AddOption("BIG BOY", AutoPaths::BIG_BOY);
+    auto3Chooser_.AddOption("Wait Five Seconds", AutoPaths::WAIT_5_SECONDS);
     frc::SmartDashboard::PutData("Third Auto Stage", &auto3Chooser_);
 
     sideChooser_.SetDefaultOption("Right", false);
@@ -200,8 +210,8 @@ void Robot::AutonomousPeriodic()
 
 void Robot::TeleopInit()
 {
-    frc::SmartDashboard::PutNumber("Set Theta", 0);
-    frc::SmartDashboard::PutNumber("Set Phi", 0);
+    // frc::SmartDashboard::PutNumber("Set Theta", 0);
+    // frc::SmartDashboard::PutNumber("Set Phi", 0);
     // frc::SmartDashboard::PutNumber("Swerve Volts", 0);
 
     cubeIntaking_ = false;
@@ -301,17 +311,14 @@ void Robot::TeleopPeriodic()
                 }
             }
         }
-        // else if (controls_->rBumperPressed())
-        // {
-        //     if(arm_->isForward())
-        //     {
-        //         arm_->setPosTo(TwoJointArmProfiles::CONE_INTAKE);
-        //     }
-        //     else
-        //     {
-        //         arm_->setPosTo(TwoJointArmProfiles::CUBE_INTAKE);
-        //     }
-        // }
+        else if (controls_->rBumperPressed())
+        {
+            if(arm_->isForward() && arm_->getPosition() == TwoJointArmProfiles::STOWED)
+            {
+                arm_->setClaw(true);
+                arm_->setPosTo(TwoJointArmProfiles::CONE_INTAKE);
+            }
+        }
         else if (controls_->dPadLeftPressed())
         {
             if (arm_->getState() == TwoJointArm::HOLDING_POS)
@@ -430,7 +437,7 @@ void Robot::TeleopPeriodic()
             }
             else
             {
-                arm_->setClawWheels(ClawConstants::INTAKING_SPEED);
+                arm_->setClawWheels(ClawConstants::OUTAKING_SPEED);
             }
         }
     }
@@ -462,14 +469,15 @@ void Robot::TeleopPeriodic()
     frc::SmartDashboard::PutBoolean("Cone Intake Down", intakesNeededDown.second);
     frc::SmartDashboard::PutBoolean("Intaking Cone", coneIntaking_);
     frc::SmartDashboard::PutBoolean("Intaking Cube", cubeIntaking_);
+    frc::SmartDashboard::PutBoolean("ESTOPPED", arm_->isEStopped());
 
     frc::SmartDashboard::PutString("Arm State", arm_->getStateString());
     frc::SmartDashboard::PutString("Arm Pos", arm_->getPosString());
 
     frc::SmartDashboard::PutNumber("Theta", arm_->getTheta());
     frc::SmartDashboard::PutNumber("Phi", arm_->getPhi());
-    frc::SmartDashboard::PutNumber("Theta vel", arm_->getThetaVel());
-    frc::SmartDashboard::PutNumber("Phi vel", arm_->getPhiVel());
+    // frc::SmartDashboard::PutNumber("Theta vel", arm_->getThetaVel());
+    // frc::SmartDashboard::PutNumber("Phi vel", arm_->getPhiVel());
     //  frc::SmartDashboard::PutNumber("Theta Volts", arm_->getThetaVolts());
     //  frc::SmartDashboard::PutNumber("Phi Volts", arm_->getPhiVolts());
 }
@@ -485,6 +493,7 @@ void Robot::DisabledInit()
 
 void Robot::DisabledPeriodic()
 {
+    frc::SmartDashboard::PutNumber("Theta", arm_->getTheta());
     swerveDrive_->reset();
     autoPaths_.setActionsSet(false);
     autoPaths_.setPathSet(false);

@@ -414,6 +414,10 @@ void AutoPaths::setPath(Path path)
     {
         break;
     }
+    case WAIT_5_SECONDS:
+    {
+        break;
+    }
     }
 
     pathSet_ = true;
@@ -501,7 +505,7 @@ void AutoPaths::periodic(SwerveDrive *swerveDrive)
             return;
         }
     }
-    else if (path_ != DRIVE_BACK_DUMB && path_ != NOTHING)
+    else if (path_ != DRIVE_BACK_DUMB && path_ != NOTHING && path_ != WAIT_5_SECONDS)
     {
         SwervePose *pose = nullptr;
         for (size_t i = pointNum_; i < swervePoints_.size(); ++i)
@@ -721,8 +725,24 @@ void AutoPaths::periodic(SwerveDrive *swerveDrive)
 
         if (arm_->getPosition() == TwoJointArmProfiles::HIGH && arm_->getState() == TwoJointArm::HOLDING_POS)
         {
-            clawOpen_ = true;
-            // pointOver = true;
+            wheelSpeed_ = ClawConstants::OUTAKING_SPEED;
+            if (!placingTimerStarted_)
+            {
+                placingStartTime_ = timer_.GetFPGATimestamp().value();
+                placingTimerStarted_ = true;
+            }
+
+            if (timer_.GetFPGATimestamp().value() - placingStartTime_ > 0.2)
+            {
+                clawOpen_ = true;
+            }
+
+            if (timer_.GetFPGATimestamp().value() - placingStartTime_ > 0.5)
+            {
+                // pointOver = true;
+                clawOpen_ = true;
+                placingTimerStarted_ = false;
+            }
             nextPointReady_ = true;
         }
         else
@@ -744,9 +764,19 @@ void AutoPaths::periodic(SwerveDrive *swerveDrive)
         if (arm_->getPosition() == TwoJointArmProfiles::CUBE_HIGH && arm_->getState() == TwoJointArm::HOLDING_POS)
         {
             wheelSpeed_ = ClawConstants::OUTAKING_SPEED;
-            pointOver = true;
-            nextPointReady_ = true;
+            if (!placingTimerStarted_)
+            {
+                placingStartTime_ = timer_.GetFPGATimestamp().value();
+                placingTimerStarted_ = true;
+            }
+
+            if (timer_.GetFPGATimestamp().value() - placingStartTime_ > 0.4)
+            {
+                pointOver = true;
+                nextPointReady_ = true;
+            }
         }
+
         else
         {
             wheelSpeed_ = ClawConstants::RETAINING_SPEED;
@@ -802,14 +832,13 @@ void AutoPaths::periodic(SwerveDrive *swerveDrive)
             if (arm_->getPosition() == TwoJointArmProfiles::CUBE_HIGH && arm_->getState() == TwoJointArm::HOLDING_POS && pointOver)
             {
                 wheelSpeed_ = ClawConstants::OUTAKING_SPEED;
-                if(!placingTimerStarted_)
+                if (!placingTimerStarted_)
                 {
                     placingStartTime_ = timer_.GetFPGATimestamp().value();
                     placingTimerStarted_ = true;
                 }
-                
-                
-                if(timer_.GetFPGATimestamp().value() - placingStartTime_ > 0.25)
+
+                if (timer_.GetFPGATimestamp().value() - placingStartTime_ > 0.25)
                 {
                     nextPointReady_ = true;
                     placingTimerStarted_ = false;
@@ -867,14 +896,13 @@ void AutoPaths::periodic(SwerveDrive *swerveDrive)
             if (arm_->getPosition() == TwoJointArmProfiles::CUBE_MID && arm_->getState() == TwoJointArm::HOLDING_POS && pointOver)
             {
                 wheelSpeed_ = ClawConstants::OUTAKING_SPEED;
-                if(!placingTimerStarted_)
+                if (!placingTimerStarted_)
                 {
                     placingStartTime_ = timer_.GetFPGATimestamp().value();
                     placingTimerStarted_ = true;
                 }
-                
-                
-                if(timer_.GetFPGATimestamp().value() - placingStartTime_ > 0.25)
+
+                if (timer_.GetFPGATimestamp().value() - placingStartTime_ > 0.25)
                 {
                     nextPointReady_ = true;
                     placingTimerStarted_ = false;
@@ -932,6 +960,21 @@ void AutoPaths::periodic(SwerveDrive *swerveDrive)
         }
 
         break;
+    }
+    case WAIT_5_SECONDS:
+    {
+        swerveDrive_->drive(0, 0, 0);
+        if(!failsafeStarted_)
+        {
+            failsafeStarted_ = true;
+            failsafeTimer_.Reset();
+            failsafeTimer_.Start();
+        }
+
+        if(failsafeTimer_.Get().value() > 5)
+        {
+            nextPointReady_ = true;
+        }
     }
     }
 }

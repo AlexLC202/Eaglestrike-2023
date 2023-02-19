@@ -121,12 +121,12 @@ bool Controls::lXTriggerPressed()
 
 bool Controls::outakePressed()
 {
-    return rJoy_.GetRawButtonPressed(InputConstants::OUTAKE_BUTTON);
+    return lJoy_.GetRawButtonPressed(InputConstants::OUTAKE_BUTTON);
 }
 
 bool Controls::intakePressed()
 {
-    return lJoy_.GetRawButtonPressed(InputConstants::INTAKE_BUTTON);
+    return rJoy_.GetRawButtonPressed(InputConstants::INTAKE_BUTTON);
 }
 
 bool Controls::lLowerButtonPressed()

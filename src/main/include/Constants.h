@@ -1,7 +1,7 @@
 #pragma once
 
 #define _USE_MATH_DEFINES
-#include <cmath>
+#include <math.h>
 #include "string"
 #include "frc/Filesystem.h"
 
@@ -55,8 +55,10 @@ namespace FieldConstants
     const double BOTTOM_CUBE_Y = 1.072;
     const double TOP_CUBE_Y = 4.424;
 
-    const double BLUE_SCORING_X = 1.923; //1.823
-    const double RED_SCORING_X = 14.617; //14.718
+    const double BLUE_SCORING_X = 1.923-0.019; //1.923
+    const double RED_SCORING_X = 14.617+0.019; //14.617
+    const double BLUE_PS_X = TAG_XY[3][0] - 0.5;
+    const double RED_PS_X = TAG_XY[4][0] + 0.5;
 
     const double AUTO_DOCK_Y = 2.748;
     const double BLUE_AUTO_DOCK_X = 2.412;
@@ -89,8 +91,8 @@ namespace InputConstants
     const int XBOX_RJOY_X = 4;
     const int XBOX_RJOY_Y = 5;
 
-    const int OUTAKE_BUTTON = 3;
-    const int INTAKE_BUTTON = 4;
+    const int OUTAKE_BUTTON = 4;
+    const int INTAKE_BUTTON = 3;
     const int LOWER_BUTTON = 5; //TODO get value
     
     const int A_BUTTON = 1;
@@ -199,11 +201,11 @@ namespace TwoJointArmConstants
     const int SHOULDER_MASTER_ID = 6;
     const int SHOULDER_SLAVE_ID = 15;
     const int ELBOW_MASTER_ID = 8;
-    const int ELBOW_SLAVE_ID = 1;
+    const int ELBOW_SLAVE_ID = 3;
     const int SHOULDER_BRAKE_ID = 4;
     const int ELBOW_BRAKE_ID = 5;
     const int SHOULDER_ENCODER_ID = 0;
-    const double SHOULDER_ENCODER_OFFSET = -311;
+    const double SHOULDER_ENCODER_OFFSET = 0;
 
     const double UPPER_ARM_I = 0.206;
     const double FOREARM_I = 0.22; //0.32, 0.35?
@@ -250,12 +252,12 @@ namespace TwoJointArmConstants
     {
         {0.3526, -0.1769, -18.5, 164.5}, //stowed, -18.5, 164.5
         {0.62747, -0.2446, 15, 140}, //cube intake, 15, 140
-        {0.84044, 0.64135, -16, 109}, //player station, -16, 109
-        {1.07418, 0.71225, 2.6, 92}, //mid, 2.6, 92
+        {0.8071, 0.63681, -18.79, 111.46}, //player station, -18.79, 111.46
+        {1.07088, 0.63964, 2.6, 92}, //mid, 2.6, 92
         {1.40282, 1.01912, 41, 22}, //high, 41, 22
         {0.91348, 0.29933, -3, 117}, //cube mid, -3, 117
         {1.31242, 0.68936, 22, 67}, //cube high, 22, 67
-        {0.62747, -0.2446, 15, 140} //cone intake, 
+        {0.57996, -0.50203, 42.32, 132.58} //cone intake, 42.32, 132.58
     };
 
     const int STOWED_NUM = 0;
@@ -277,29 +279,29 @@ namespace TwoJointArmConstants
 namespace ClawConstants
 {
     const int PNEUMATIC_ID = 6; //TODO get value
-    const int WHEEL_MOTOR_ID = 24;
-    const double INTAKING_SPEED = 1.5;
-    const double OUTAKING_SPEED = -0.1;
+    const int WHEEL_MOTOR_ID = 1;
+    const double INTAKING_SPEED = 7;
+    const double OUTAKING_SPEED = -2;
     const double RETAINING_SPEED = 0.5;
     const double RETAINING_CURRENT = 7;
 }
 
-namespace CubeIntakeConstants {
-    const int DEPLOYER_MOTOR_ID = 0; // TODO get value
-    const int ROLLER_MOTOR_ID = 0; // TODO get value
+// namespace CubeIntakeConstants {
+//     const int DEPLOYER_MOTOR_ID = 0; // TODO get value
+//     const int ROLLER_MOTOR_ID = 0; // TODO get value
 
-    const double ENCODER_DEPLOYED_TARGET = 512;
+//     const double ENCODER_DEPLOYED_TARGET = 512;
 
-    const double DEPLOYER_MAX_VOLTAGE = 0;    // TODO measure capped voltage for deployer
-    const double ROLLER_MAX_VOLTAGE = 0;      // TODO measure voltage for cube to actually pass through
+//     const double DEPLOYER_MAX_VOLTAGE = 0;    // TODO measure capped voltage for deployer
+//     const double ROLLER_MAX_VOLTAGE = 0;      // TODO measure voltage for cube to actually pass through
 
-    const double kP = 0; // TODO tune
-    const double kI = 0; // TODO tune
-    const double kD = 0; // TODO tune
+//     const double kP = 0; // TODO tune
+//     const double kI = 0; // TODO tune
+//     const double kD = 0; // TODO tune
 
-    const double MAX_VELOCITY = pi / 2;   // TODO tune - radians per second
-    const double MAX_ACCELERATION = pi;   // TODO tune - radians per second squared
+//     const double MAX_VELOCITY = pi / 2;   // TODO tune - radians per second
+//     const double MAX_ACCELERATION = pi;   // TODO tune - radians per second squared
 
-    const double POS_ERR_TOLERANCE = 0.01;  // TODO tune - error tolerance, in radians
-    const double VEL_ERR_TOLERANCE = 0.1;   // TODO tune - error tolerance, in radians/s
-} // namespace CubeIntakeConstants
+//     const double POS_ERR_TOLERANCE = 0.01;  // TODO tune - error tolerance, in radians
+//     const double VEL_ERR_TOLERANCE = 0.1;   // TODO tune - error tolerance, in radians/s
+// } // namespace CubeIntakeConstants

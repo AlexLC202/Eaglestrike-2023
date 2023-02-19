@@ -2,7 +2,7 @@
 
 #include <ctre/Phoenix.h>
 #include <iostream>
-#include <cmath>
+#include <math.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <string.h>
 #include <frc/Solenoid.h>
@@ -77,14 +77,14 @@ class TwoJointArm
         bool clawOpen();
 
     private:
-        // WPI_TalonFX shoulderMaster_;
-        // WPI_TalonFX shoulderSlave_;
-        // WPI_TalonFX elbowMaster_;
-        // WPI_TalonFX elbowSlave_;
-        WPI_TalonSRX shoulderMaster_;
-        WPI_TalonSRX shoulderSlave_;
-        WPI_TalonSRX elbowMaster_;
-        WPI_TalonSRX elbowSlave_;
+        WPI_TalonFX shoulderMaster_;
+        WPI_TalonFX shoulderSlave_;
+        WPI_TalonFX elbowMaster_;
+        WPI_TalonFX elbowSlave_;
+        // WPI_TalonSRX shoulderMaster_;
+        // WPI_TalonSRX shoulderSlave_;
+        // WPI_TalonSRX elbowMaster_;
+        // WPI_TalonSRX elbowSlave_;
         // TalonFXSim shoulderMaster_;
         // TalonFXSim shoulderSlave_;
         // TalonFXSim elbowMaster_;

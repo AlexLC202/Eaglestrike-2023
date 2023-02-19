@@ -23,7 +23,8 @@ class AutoPaths
             SECOND_CUBE,
             AUTO_DOCK,
             NOTHING,
-            DRIVE_BACK_DUMB
+            DRIVE_BACK_DUMB,
+            WAIT_5_SECONDS
         };
         AutoPaths(SwerveDrive* swerveDrive, TwoJointArm* arm);
         void setActions(Path a1, Path a2, Path a3);
