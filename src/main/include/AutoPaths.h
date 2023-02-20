@@ -27,14 +27,14 @@ class AutoPaths
             WAIT_5_SECONDS
         };
         AutoPaths(SwerveDrive* swerveDrive, TwoJointArm* arm);
-        void setActions(Path a1, Path a2, Path a3);
+        void setActions(Path a1, Path a2, Path a3, Path a4);
         vector<Path> getActions();
 
         void startTimer();
         void setActionsSet(bool actionsSet);
         void setPathSet(bool pathSet);
 
-        void periodic(SwerveDrive* swerveDrive);
+        void periodic();
         double initYaw();
         pair<double, double> initPos();
 
@@ -54,8 +54,8 @@ class AutoPaths
         SwerveDrive* swerveDrive_;
         TwoJointArm* arm_;
 
-        TrajectoryCalc xTraj_{SwerveConstants::MAX_LV * 0.6, SwerveConstants::MAX_LA * 0.6, 0, 0, 0, 0};
-        TrajectoryCalc yTraj_{SwerveConstants::MAX_LV * 0.6, SwerveConstants::MAX_LA * 0.6, 0, 0, 0, 0};
+        TrajectoryCalc xTraj_{SwerveConstants::MAX_LV * 0.7, SwerveConstants::MAX_LA * 0.7, 0, 0, 0, 0};
+        TrajectoryCalc yTraj_{SwerveConstants::MAX_LV * 0.7, SwerveConstants::MAX_LA * 0.7, 0, 0, 0, 0};
         TrajectoryCalc yawTraj_{SwerveConstants::MAX_AV * 0.4, SwerveConstants::MAX_AA * 0.4, 0, 0, 0, 0};
 
         frc::Timer timer_;

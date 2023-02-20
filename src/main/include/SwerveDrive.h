@@ -20,7 +20,8 @@ class SwerveDrive
         SwerveDrive();
         void setYaw(double yaw);
         
-        void periodic(double yaw, Controls* controls, bool forward, bool panic);
+        void periodic(double yaw);
+        void teleopPeriodic(Controls* controls, bool forward, bool panic);
         void drive(double xSpeed, double ySpeed, double turn);
         void drivePose(SwervePose pose);
         void adjustPos(SwervePose pose);

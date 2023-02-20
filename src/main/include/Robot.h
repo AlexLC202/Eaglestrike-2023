@@ -39,6 +39,7 @@ private:
     frc::SendableChooser<AutoPaths::Path> auto1Chooser_;
     frc::SendableChooser<AutoPaths::Path> auto2Chooser_;
     frc::SendableChooser<AutoPaths::Path> auto3Chooser_;
+    frc::SendableChooser<AutoPaths::Path> auto4Chooser_;
     frc::SendableChooser<bool> sideChooser_;
 
     AHRS *navx_;
