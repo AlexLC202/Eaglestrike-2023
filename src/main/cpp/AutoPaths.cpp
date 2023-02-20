@@ -256,7 +256,7 @@ void AutoPaths::setPath(Path path)
             yaw2 = -90;
             if (!mirrored_)
             {
-                y1 = FieldConstants::TOP_MID_PIECE_Y; // HERE + 0.3
+                y1 = FieldConstants::TOP_MID_PIECE_Y; // F + 0.3
                 y2 = FieldConstants::TOP_CONE_Y;
             }
             else

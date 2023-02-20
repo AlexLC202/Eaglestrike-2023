@@ -136,8 +136,8 @@ void Robot::RobotPeriodic()
     frc::SmartDashboard::PutNumber("y", swerveDrive_->getY());
     frc::SmartDashboard::PutNumber("Theta", arm_->getTheta());
     frc::SmartDashboard::PutNumber("Phi", arm_->getPhi());
-    // frc::SmartDashboard::PutNumber("Theta vel", arm_->getThetaVel());
-    // frc::SmartDashboard::PutNumber("Phi vel", arm_->getPhiVel());
+    frc::SmartDashboard::PutNumber("Theta vel", arm_->getThetaVel());
+    frc::SmartDashboard::PutNumber("Phi vel", arm_->getPhiVel());
     // frc::SmartDashboard::PutNumber("Theta Volts", arm_->getThetaVolts());
     // frc::SmartDashboard::PutNumber("Phi Volts", arm_->getPhiVolts());
 }
@@ -379,7 +379,7 @@ void Robot::TeleopPeriodic()
                 if (cubeIntaking_)
                 {
                     arm_->setPosTo(TwoJointArmProfiles::STOWED);
-                    arm_->setClawWheels(0);
+                    //arm_->setClawWheels(0);
                     // arm_->setClaw(false);
                 }
                 cubeIntaking_ = !cubeIntaking_;
@@ -400,14 +400,13 @@ void Robot::TeleopPeriodic()
             //     cubeIntaking_ = false;
             // }
 
-            arm_->intake();
         }
         else if (controls_->dPadUpPressed())
         {
             if (cubeIntaking_)
             {
-                arm_->toggleForwardCubeIntake();
-                cubeIntaking_ = false;
+                // arm_->toggleForwardCubeIntake();
+                // cubeIntaking_ = false;
             }
             else
             {
@@ -426,6 +425,7 @@ void Robot::TeleopPeriodic()
         arm_->resetIntaking();
         coneIntaking_ = false;
         cubeIntaking_ = false;
+        arm_->setEStopped(true);
     }
 
     if (cubeIntaking_)

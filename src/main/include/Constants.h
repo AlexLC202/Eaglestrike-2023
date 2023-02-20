@@ -167,7 +167,7 @@ namespace SwerveConstants
     const double kaP = 0.06; //0.008
     const double kaD = 0;
 
-    const double CLAW_MID_OFFSET = 0.0889;
+    const double CLAW_MID_OFFSET = 0.05; //0.0889
 
 }
 
@@ -219,10 +219,10 @@ namespace TwoJointArmConstants
     const double SHOULDER_I = UPPER_ARM_I + UPPER_ARM_M * UPPER_ARM_COM_DIST * UPPER_ARM_COM_DIST;
     const double ELBOW_I = FOREARM_I + FOREARM_M * FOREARM_COM_DIST * FOREARM_COM_DIST;
 
-    const double SHOULDER_KV = 13.6664;
-    const double SHOULDER_KVI = -10.6125;
-    const double ELBOW_KV = 43.4462;
-    const double ELBOW_KVI = -29.9439;
+    const double SHOULDER_KV = 13.6377; //13.6664
+    const double SHOULDER_KVI = -8.54262; //-10.6125
+    const double ELBOW_KV = 40.8737; //43.4462
+    const double ELBOW_KVI = -22.7796; //-29.9439
 
     const double skD_ = 0.05;
     const double skP_ = 0.05;
@@ -257,7 +257,7 @@ namespace TwoJointArmConstants
         {1.49643, 0.92416, 52.4, 10}, //high, 52.4, 10
         {0.91348, 0.29933, -3, 117}, //cube mid, -3, 117
         {1.31242, 0.68936, 22, 67}, //cube high, 22, 67
-        {0.40667, -0.51622, 44, 141.3} //cone intake, 44, 141.3
+        {0.40667, -0.51622, 44, 141.3} //cone intake, 45, 127
     };
 
     const int STOWED_NUM = 0;
@@ -278,7 +278,7 @@ namespace TwoJointArmConstants
 
 namespace ClawConstants
 {
-    const int PNEUMATIC_ID = 6; //TODO get value
+    const int PNEUMATIC_ID = 6;
     const int WHEEL_MOTOR_ID = 1;
     const double INTAKING_SPEED = 7;
     const double OUTAKING_SPEED = -3;

@@ -280,6 +280,9 @@ void TwoJointArm::stop()
     homing_ = {false, false};
     switchingDirections_ = false;
     switchingToCubeIntake_ = false;
+    intaking_ = false;
+    gettingCone_ = false;
+    gotCone_ = false;
 }
 
 void TwoJointArm::resetIntaking()
@@ -314,20 +317,22 @@ void TwoJointArm::switchDirectionsCubeIntake()
     double theta = getTheta();
     double phi = getPhi();
     double wantedTheta, wantedPhi;
-    if(forward_)
-    {
-        wantedTheta = -TwoJointArmConstants::ARM_POSITIONS[TwoJointArmConstants::CUBE_INTAKE_NUM][2];
-        wantedPhi = 360 - TwoJointArmConstants::ARM_POSITIONS[TwoJointArmConstants::CUBE_INTAKE_NUM][3];
-        switchingToCubeIntake_ = true;
-    }
-    else
-    {
-        wantedTheta = -TwoJointArmConstants::ARM_POSITIONS[TwoJointArmConstants::STOWED_NUM][2];
-        wantedPhi = 360 - TwoJointArmConstants::ARM_POSITIONS[TwoJointArmConstants::STOWED_NUM][3];
-        switchingToCubeIntake_ = false;
-    }
-    
-    
+    wantedTheta = -TwoJointArmConstants::ARM_POSITIONS[TwoJointArmConstants::CUBE_INTAKE_NUM][2];
+    wantedPhi = 360 - TwoJointArmConstants::ARM_POSITIONS[TwoJointArmConstants::CUBE_INTAKE_NUM][3];
+    switchingToCubeIntake_ = true;
+    // if (forward_)
+    // {
+    //     wantedTheta = -TwoJointArmConstants::ARM_POSITIONS[TwoJointArmConstants::CUBE_INTAKE_NUM][2];
+    //     wantedPhi = 360 - TwoJointArmConstants::ARM_POSITIONS[TwoJointArmConstants::CUBE_INTAKE_NUM][3];
+    //     switchingToCubeIntake_ = true;
+    // }
+    // else
+    // {
+    //     wantedTheta = -TwoJointArmConstants::ARM_POSITIONS[TwoJointArmConstants::STOWED_NUM][2];
+    //     wantedPhi = 360 - TwoJointArmConstants::ARM_POSITIONS[TwoJointArmConstants::STOWED_NUM][3];
+    //     switchingToCubeIntake_ = false;
+    // }
+
     double thetaVel = getThetaVel(); // shoulderMaster_.GetSelectedSensorVelocity() * (10.0 / 2048.0) * 360.0 * TwoJointArmConstants::MOTOR_TO_SHOULDER_RATIO;
     double phiVel = getPhiVel();     // elbowMaster_.GetSelectedSensorVelocity() * (10.0 / 2048.0) * 360.0 * TwoJointArmConstants::MOTOR_TO_ELBOW_RATIO - thetaVel * TwoJointArmConstants::SHOULDER_TO_ELBOW_RATIO;
 
@@ -606,11 +611,15 @@ void TwoJointArm::followJointSpaceProfile()
         {
             forward_ = !forward_;
             switchingDirections_ = false;
+            setPosition_ = TwoJointArmProfiles::STOWED;
+            position_ = TwoJointArmProfiles::STOWED;
             if (switchingToCubeIntake_)
             {
                 wantedTheta = TwoJointArmConstants::ARM_POSITIONS[TwoJointArmConstants::CUBE_INTAKE_NUM][2];
                 wantedPhi = TwoJointArmConstants::ARM_POSITIONS[TwoJointArmConstants::CUBE_INTAKE_NUM][3];
                 switchingToCubeIntake_ = false;
+                setPosition_ = TwoJointArmProfiles::CUBE_INTAKE;
+                position_ = TwoJointArmProfiles::CUBE_INTAKE;
             }
             else
             {
@@ -745,7 +754,7 @@ void TwoJointArm::toggleForward()
 
 void TwoJointArm::toggleForwardCubeIntake()
 {
-    if (state_ == HOLDING_POS && (position_ == TwoJointArmProfiles::STOWED || position_ == TwoJointArmProfiles::CUBE_INTAKE) && !switchingDirections_)
+    if (state_ == HOLDING_POS && (position_ == TwoJointArmProfiles::STOWED /* || position_ == TwoJointArmProfiles::CUBE_INTAKE*/) && !switchingDirections_)
     {
         switchDirectionsCubeIntake();
     }
@@ -1166,23 +1175,23 @@ void TwoJointArm::setElbowVolts(double volts)
 
 double TwoJointArm::getTheta()
 {
-    //return shoulderMaster_.GetSelectedSensorPosition(); //HERE
-    // double theta = shoulderMaster_.GetSelectedSensorPosition() / 2048 * 360 * TwoJointArmConstants::MOTOR_TO_SHOULDER_RATIO;
-    // double theta = shoulderEncoder_.GetAbsolutePosition();
+    // return shoulderMaster_.GetSelectedSensorPosition(); //HERE
+    //  double theta = shoulderMaster_.GetSelectedSensorPosition() / 2048 * 360 * TwoJointArmConstants::MOTOR_TO_SHOULDER_RATIO;
+    //  double theta = shoulderEncoder_.GetAbsolutePosition();
     double theta = -(shoulderEncoder_.GetAbsolutePosition() * 360.0) + TwoJointArmConstants::SHOULDER_ENCODER_OFFSET;
 
-    frc::SmartDashboard::PutNumber("GetSC", shoulderEncoder_.GetSourceChannel());
-    frc::SmartDashboard::PutNumber("GetAP", shoulderEncoder_.GetAbsolutePosition());
-    frc::SmartDashboard::PutNumber("Get", shoulderEncoder_.Get().value());
-    frc::SmartDashboard::PutNumber("GetDist", shoulderEncoder_.GetDistance());
-    frc::SmartDashboard::PutBoolean("Alive", shoulderEncoder_.IsConnected());
+    // frc::SmartDashboard::PutNumber("GetSC", shoulderEncoder_.GetSourceChannel());
+    // frc::SmartDashboard::PutNumber("GetAP", shoulderEncoder_.GetAbsolutePosition());
+    // frc::SmartDashboard::PutNumber("Get", shoulderEncoder_.Get().value());
+    // frc::SmartDashboard::PutNumber("GetDist", shoulderEncoder_.GetDistance());
+    // frc::SmartDashboard::PutBoolean("Alive", shoulderEncoder_.IsConnected());
     Helpers::normalizeAngle(theta);
     return (forward_) ? theta : -theta;
 }
 
 double TwoJointArm::getPhi()
 {
-    //return elbowMaster_.GetSelectedSensorPosition(); //HERE
+    // return elbowMaster_.GetSelectedSensorPosition(); //HERE
     if (forward_)
     {
         return elbowMaster_.GetSelectedSensorPosition() / 2048 * 360 * TwoJointArmConstants::MOTOR_TO_ELBOW_RATIO * TwoJointArmConstants::SHOULDER_TO_ELBOW_RATIO - (getTheta() * TwoJointArmConstants::SHOULDER_TO_ELBOW_RATIO);
